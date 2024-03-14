@@ -1,20 +1,7 @@
 class GildedRose
 
-  def sell.for(name, days_remaining, quality)
+  def self.for(name, days_remaining, quality)
     @item = klass_for(name).new(quality, days_remaining)
-  end
-
-  def klass_for(name)
-    case name
-    when 'Normal Item'
-      Normal
-    when 'Aged Brie'
-      Brie
-    when 'Sulfuras, Hand of Ragnaros'
-      Sulfuras
-    when 'Backstage passes to a TAFKAL80ETC concert'
-      Backstage
-    end
   end
 
   class Item
@@ -22,9 +9,11 @@ class GildedRose
     def initialize(quality, days_remaining)
       @quality, @days_remaining = quality, days_remaining
     end
+    def tick
+    end
   end
 
-  class Nomral < Item
+  class Normal < Item
     def tick
       @days_remaining -= 1
       return if @quality == 0
@@ -56,5 +45,23 @@ class GildedRose
       @quality += 1 if @days_remaining < 10
       @quality += 1 if @days_remaining < 5
     end
+  end
+  class Conjured < Item
+    def tick
+      @days_remaining -= 1
+      return if @quality == 0
+      @quality -= 2
+      @quality -= 2 if @days_remaining <= 0
+    end
+  end
+  DEFAULT_CLASS = Item
+  SPECIALIZED_CLASS = {
+    'Normal Item'                               => Normal,
+    'Aged Brie'                                 => Brie,
+    'Backstage passes to a TAFKAL80ETC concert' => Backstage,
+    'Conjured Mana Cake'                        => Conjured }
+  def self.new(name:, days_remaining:, quality:)
+    (SPECIALIZED_CLASS[name] || DEFAULT_CLASS).
+      new(quality, days_remaining)
   end
 end

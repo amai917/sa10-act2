@@ -8,12 +8,13 @@ class GildedRose
   end
 
   def tick
-
     case name
     when 'Normal Item'
       return normal_tick
     when 'Aged Brie'
       return brie_tick
+    when 'Sulfuras, Hand of Ragnaros'
+      return sulfuras_tick
     end
 
     if @name != "Aged Brie" and @name != "Backstage passes to a TAFKAL80ETC concert"
@@ -77,4 +78,6 @@ class GildedRose
     @quality += 1 if @days_remaining <= 0 && quality < 50
   end
   
+  def sulfuras_tick
+  end
 end

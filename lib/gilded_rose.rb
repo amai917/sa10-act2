@@ -9,7 +9,7 @@ class GildedRose
 
   def tick
     case name
-    when 'Normal Item'
+    when 'Normal'
       return normal_tick
     when 'Aged Brie'
       return brie_tick
@@ -18,13 +18,24 @@ class GildedRose
     when 'Backstage passes to a TAFKAL80ETC concert'
       return backstage_tick
     end
+  end
 
-  def normal_tick
-    @days_remaining -= 1
-    return if @quality == 0
+  def normal_item_tick
+    @item = Normal.new(quality, days_remaining)
+    item.tick
+  end
 
-    @quality -= 1
-    @quality -= 1 if @days_remaining <= 0
+  class Normal
+    attr_reader :quality, :days_remaining
+    def initialize(quality, days_remaining)
+      @quality, @days_remaining = quality, days_remaining
+    end
+    def tick
+      @days_remaining -= 1
+      return if @quality == 0
+      @quality -= 1
+      @quality -= 1 if @days_remaining <= 0
+    end
   end
 
   def brie_tick
@@ -32,7 +43,7 @@ class GildedRose
     return if @quality >= 50
 
     @quality += 1
-    @quality += 1 if @days_remaining <= 0 && quality < 50
+    @quality += 1 if @days_remaining <= 0 && @quality < 50
   end
   
   def sulfuras_tick
@@ -47,5 +58,4 @@ class GildedRose
     @quality += 1 if @days_remaining < 10
     @quality += 1 if @days_remaining < 5
   end
-
 end

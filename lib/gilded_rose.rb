@@ -1,7 +1,6 @@
 class GildedRose
-  attr_reader :item
 
-  def initialize(name:, days_remaining:, quality:)
+  def sell.for(name, days_remaining, quality)
     @item = klass_for(name).new(quality, days_remaining)
   end
 
@@ -18,23 +17,14 @@ class GildedRose
     end
   end
 
-  def tick
-    item.tick
-  end
-
-  def quality
-    item.quality
-  end
-
-  def days_remaining
-    item.days_remaining
-  end
-
-  class Normal
+  class Item
     attr_reader :quality, :days_remaining
     def initialize(quality, days_remaining)
       @quality, @days_remaining = quality, days_remaining
     end
+  end
+
+  class Nomral < Item
     def tick
       @days_remaining -= 1
       return if @quality == 0
@@ -43,11 +33,7 @@ class GildedRose
     end
   end
   
-  class Brie
-    attr_reader :quality, :days_remaining
-    def initialize (quality, days_remaining)
-      @quality, @days_remaining = quality, days_remaining
-    end
+  class Brie < Item
     def tick
       @days_remaining -= 1
       return if @quality >= 50
@@ -56,21 +42,12 @@ class GildedRose
     end
   end
   
-  class Sulfuras
-    attr_reader :quality, :days_remaining
-    def initialize(quality, days_remaining)
-      @quality, @days_remaining = quality, days_remaining
-    end
-
+  class Sulfuras < Item
     def tick
     end
   end
 
-  class Backstage
-    attr_reader :quality, :days_remaining
-    def initialize(quality, days_remaining)
-      @quality, @days_remaining = quality, days_remaining
-    end
+  class Backstage < Item
     def tick
       @days_remaining -= 1
       return if @quality >= 50
